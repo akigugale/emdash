@@ -41,7 +41,7 @@ import {
 	verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import type { Element } from "@emdash-cms/blocks";
+import { evaluateCondition, type Element, type FieldCondition } from "@emdash-cms/blocks";
 import type { MessageDescriptor } from "@lingui/core";
 import { msg, plural } from "@lingui/core/macro";
 import { useLingui as useLinguiContext } from "@lingui/react";
@@ -1193,6 +1193,13 @@ function numberRangeProblem(field: Element, value: unknown): MessageDescriptor |
 	return undefined;
 }
 
+function visiblePluginBlockFields<T extends { condition?: FieldCondition }>(
+	fields: T[],
+	values: Record<string, unknown>,
+): T[] {
+	return fields.filter((field) => !field.condition || evaluateCondition(field.condition, values));
+}
+
 function pluginBlockProblems(
 	block: PluginBlockDef | null,
 	values: Record<string, unknown>,
@@ -1208,7 +1215,7 @@ function pluginBlockProblems(
 		return { fields: {}, form: msg`Fill in at least one field.` };
 	}
 	const fieldProblems: Record<string, MessageDescriptor> = {};
-	for (const field of fields) {
+	for (const field of visiblePluginBlockFields(fields, values)) {
 		const problem = numberRangeProblem(field, values[field.action_id]);
 		if (problem) fieldProblems[field.action_id] = problem;
 	}
@@ -1378,7 +1385,7 @@ function PluginBlockModal({
 					<form id={formId} noValidate onSubmit={handleSubmit}>
 						<div className="grid gap-5" data-field-invalid={formError ? true : undefined}>
 							{hasFields ? (
-								block.fields!.map((field) => {
+								visiblePluginBlockFields(block.fields!, formValues).map((field) => {
 									const fieldError = fieldErrors[field.action_id];
 									const errorId = fieldError ? `${formId}-${field.action_id}-error` : undefined;
 									return (
@@ -1777,6 +1784,7 @@ function BlockKitRepeaterItem({
 	onChange: (subActionId: string, value: unknown) => void;
 }) {
 	const { t } = useLingui();
+	const visibleFields = visiblePluginBlockFields(fields, item);
 	const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
 		id: item._key,
 	});
@@ -1786,8 +1794,8 @@ function BlockKitRepeaterItem({
 		transition,
 	};
 
-	// Summary label: value of the first text_input sub-field, falling back to "Item N".
-	const summaryField = fields.find((f) => f.type === "text_input");
+	// Summary label: value of the first visible text_input sub-field, falling back to "Item N".
+	const summaryField = visibleFields.find((f) => f.type === "text_input");
 	const summaryValue =
 		summaryField && typeof item[summaryField.action_id] === "string"
 			? (item[summaryField.action_id] as string)
@@ -1840,7 +1848,7 @@ function BlockKitRepeaterItem({
 
 			{!isCollapsed && (
 				<div className="p-3 space-y-3">
-					{fields.map((sf) => (
+					{visibleFields.map((sf) => (
 						<BlockKitField
 							key={sf.action_id}
 							field={sf}

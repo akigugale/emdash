@@ -81,6 +81,69 @@ Use the Block Kit element shapes documented in [Block Kit](/plugins/creating-plu
 }
 ```
 
+### Show a field only for some values
+
+A top-level field can set `condition` to appear in the edit dialog only while another top-level field has a given value. The condition names that field's `action_id` and sets either `eq` or `neq`. The dialog re-checks conditions as the editor changes values.
+
+The following fields add an optional link to the callout. The link fields appear only while **Add link** is on:
+
+```typescript title="src/index.ts"
+fields: [
+	{ type: "toggle", action_id: "has_link", label: "Add link" },
+	{
+		type: "text_input",
+		action_id: "link_label",
+		label: "Link label",
+		condition: { field: "has_link", eq: true },
+	},
+	{
+		type: "text_input",
+		action_id: "link_url",
+		label: "Link URL",
+		condition: { field: "has_link", eq: true },
+	},
+],
+```
+
+A hidden field keeps the value it had and is saved with the block, so the editor's input returns if the field appears again. The dialog skips validation for hidden fields. Have the Astro component check the controlling field rather than the presence of a value, for example rendering the link only when `node.has_link` is `true`.
+
+A `repeater` sub-field can set `condition` too. Its condition names another sub-field of the same row, and each row is checked against its own values. The following repeater gives each card a **Link URL** until that card's **Card links to** choice is a file download, which shows a **File** picker instead:
+
+```typescript title="src/index.ts"
+{
+	type: "repeater",
+	action_id: "cards",
+	label: "Cards",
+	fields: [
+		{ type: "text_input", action_id: "title", label: "Title" },
+		{
+			type: "select",
+			action_id: "link_type",
+			label: "Card links to",
+			options: [
+				{ label: "A page", value: "link" },
+				{ label: "A file download", value: "download" },
+			],
+		},
+		{
+			type: "text_input",
+			action_id: "link_url",
+			label: "Link URL",
+			condition: { field: "link_type", neq: "download" },
+		},
+		{
+			type: "media_picker",
+			action_id: "file",
+			label: "File",
+			mime_type_filter: "",
+			condition: { field: "link_type", eq: "download" },
+		},
+	],
+},
+```
+
+A new row starts with empty values and ignores `initial_value`, so the example uses `neq` to show **Link URL** before a choice is made. A row's title in the collapsed list comes from its first visible `text_input`. A row condition can't name a field outside the row.
+
 ## Add the Astro component
 
 <Steps>

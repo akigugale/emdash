@@ -483,6 +483,8 @@ Form fields can be conditionally shown based on other field values:
 
 The `api_key` field only appears when `auth_enabled` is toggled on. Conditions are evaluated client-side with no round-trip.
 
+Fields of a native plugin's Portable Text block accept the same `condition`. See [Show a field only for some values](/plugins/creating-native-plugins/portable-text-components/#show-a-field-only-for-some-values) for how the block edit dialog applies it.
+
 `secret_input` uses `has_value: true` to show that a value already exists; it does not accept or return the stored value on page load. The field masks typing in the browser. Declare the matching key as `type: "secret"` in `admin.settingsSchema` and save it through `ctx.settings` so EmDash encrypts it. Follow [Secret settings](/plugins/creating-plugins/settings/#secret-values) before storing credentials.
 
 ## Try it

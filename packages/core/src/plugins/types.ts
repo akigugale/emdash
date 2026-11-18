@@ -10,7 +10,12 @@
  */
 
 import type { Permission } from "@emdash-cms/auth";
-import type { ConfirmDialog, Element, PluginUiContext } from "@emdash-cms/blocks";
+import type {
+	ConfirmDialog,
+	Element,
+	PluginUiContext,
+	PortableTextBlockField as BlocksPortableTextBlockField,
+} from "@emdash-cms/blocks";
 // The plugin capability vocabulary, the legacy-rename map, and the manifest
 // shape are authored once in @emdash-cms/plugin-types and shared between core
 // (the manifest reader at install/runtime) and @emdash-cms/plugin-cli (the
@@ -2083,11 +2088,11 @@ export type SettingField =
 	| EmailSettingField;
 
 /**
- * Block Kit element for block editing fields.
- * This is the `Element` discriminated union from `@emdash-cms/blocks`.
+ * Block Kit element for block editing fields, with an optional `condition`.
+ * This is `PortableTextBlockField` from `@emdash-cms/blocks`.
  * Plugin authors should use `@emdash-cms/blocks` builder functions to create these.
  */
-export type PortableTextBlockField = Element;
+export type PortableTextBlockField = BlocksPortableTextBlockField;
 
 /**
  * Configuration for a Portable Text block type contributed by a plugin

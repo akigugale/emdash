@@ -10,7 +10,7 @@
  */
 
 import { Button, Input } from "@cloudflare/kumo";
-import type { Element } from "@emdash-cms/blocks";
+import type { PortableTextBlockField } from "@emdash-cms/blocks";
 import type { MessageDescriptor } from "@lingui/core";
 import { msg } from "@lingui/core/macro";
 import { useLingui } from "@lingui/react/macro";
@@ -48,7 +48,7 @@ export interface PluginBlockDef {
 	description?: string;
 	placeholder?: string;
 	/** Block Kit form fields. If declared, replaces the simple URL input. */
-	fields?: Element[];
+	fields?: PortableTextBlockField[];
 	/**
 	 * Optional display category in the slash menu. Defaults to "Embeds" when omitted.
 	 */

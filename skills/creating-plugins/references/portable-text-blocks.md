@@ -84,6 +84,20 @@ See [Block Kit](./block-kit.md) for element shapes. The Portable Text editor add
 
 The `action_id` of each field becomes a key in the Portable Text block data. The field with `action_id: "id"` is treated as the primary identifier (typically the URL).
 
+A top-level field can set `condition` (`{ field, eq }` or `{ field, neq }`, naming another top-level field's `action_id`) so the edit dialog shows it only while that field matches. Hidden fields keep their saved value and skip validation, so the site renderer must check the controlling field instead of assuming a stored value is current. A `repeater` sub-field's `condition` names another sub-field of the same row, and each row is checked against its own values; it can't name a field outside the row.
+
+```typescript
+fields: [
+	{ type: "toggle", action_id: "has_link", label: "Add link" },
+	{
+		type: "text_input",
+		action_id: "link_url",
+		label: "Link URL",
+		condition: { field: "has_link", eq: true },
+	},
+];
+```
+
 ### Data Flow
 
 1. User types `/` in the editor and selects a block type

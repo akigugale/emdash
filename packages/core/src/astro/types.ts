@@ -5,7 +5,7 @@
  * the locals interface that the middleware provides.
  */
 
-import type { Element } from "@emdash-cms/blocks";
+import type { Element, PortableTextBlockField } from "@emdash-cms/blocks";
 import type { Kysely } from "kysely";
 
 import type { ContentWrite } from "../api/content-save.js";
@@ -133,7 +133,7 @@ export interface ManifestPlugin {
 		icon?: string;
 		description?: string;
 		placeholder?: string;
-		fields?: Element[];
+		fields?: PortableTextBlockField[];
 	}>;
 }
 

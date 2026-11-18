@@ -499,6 +499,8 @@ Show/hide fields based on other field values. Evaluated client-side, no round-tr
 }
 ```
 
+Portable Text block `fields` and their `repeater` sub-fields accept the same `condition`. See [Portable Text Block Types](./portable-text-blocks.md#fields).
+
 ## Builder Helpers
 
 `@emdash-cms/blocks` provides TypeScript helpers:

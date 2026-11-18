@@ -1,29 +1,10 @@
 import { Button } from "@cloudflare/kumo";
 import { useCallback, useRef, useState } from "react";
 
+import { evaluateCondition } from "../conditions.js";
 import { FormOwnerContext } from "../form-context.js";
 import { renderElement } from "../render-element.js";
-import type { BlockInteraction, FieldCondition, FormBlock, FormField } from "../types.js";
-
-function deepEqual(a: unknown, b: unknown): boolean {
-	if (a === b) return true;
-	if (Array.isArray(a) && Array.isArray(b)) {
-		if (a.length !== b.length) return false;
-		return a.every((v, i) => deepEqual(v, b[i]));
-	}
-	return false;
-}
-
-function evaluateCondition(condition: FieldCondition, values: Record<string, unknown>): boolean {
-	const fieldValue = values[condition.field];
-	if ("eq" in condition && condition.eq !== undefined) {
-		return deepEqual(fieldValue, condition.eq);
-	}
-	if ("neq" in condition && condition.neq !== undefined) {
-		return !deepEqual(fieldValue, condition.neq);
-	}
-	return true;
-}
+import type { BlockInteraction, FormBlock, FormField } from "../types.js";
 
 function getInitialValues(fields: FormField[]): Record<string, unknown> {
 	const values: Record<string, unknown> = {};

@@ -2,6 +2,7 @@ export { BlockRenderer } from "./renderer.js";
 export type { BlockRendererProps } from "./renderer.js";
 export { renderElement } from "./render-element.js";
 export { cn, formatRelativeTime } from "./utils.js";
+export { evaluateCondition } from "./conditions.js";
 
 // Builders and validation
 export { blocks, elements } from "./builders.js";
@@ -44,6 +45,7 @@ export type {
 	// Form
 	FieldCondition,
 	FormField,
+	PortableTextBlockField,
 	// Block sub-types
 	TableColumn,
 	StatItem,

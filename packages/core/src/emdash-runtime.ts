@@ -9,7 +9,7 @@
 
 import { getLocaleDir, resolveLocale } from "@emdash-cms/admin/locales";
 import { Permissions, toRoleLevel, type RoleLevel } from "@emdash-cms/auth";
-import type { Element } from "@emdash-cms/blocks";
+import type { Element, PortableTextBlockField } from "@emdash-cms/blocks";
 import {
 	normalizePluginPagePath,
 	validateBlockResponse,
@@ -3981,7 +3981,7 @@ export class EmDashRuntime {
 					icon?: string;
 					description?: string;
 					placeholder?: string;
-					fields?: Element[];
+					fields?: PortableTextBlockField[];
 					category?: string;
 				}>;
 				fieldWidgets?: Array<{

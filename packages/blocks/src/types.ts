@@ -121,12 +121,19 @@ export interface RadioElement {
 	initial_value?: string;
 }
 
-export type RepeaterSubField =
+/**
+ * A field in each repeater row. A sub-field with a `condition` is shown only
+ * while that condition matches another sub-field of the same row.
+ */
+export type RepeaterSubField = (
 	| TextInputElement
 	| NumberInputElement
 	| SelectElement
 	| ToggleElement
-	| MediaPickerElement;
+	| MediaPickerElement
+) & {
+	condition?: FieldCondition;
+};
 
 /**
  * Array-of-objects field. Renders as a list of collapsible cards with inline
@@ -206,6 +213,15 @@ export type FormField = (
 	| ComboboxElement
 	| RadioElement
 ) & {
+	condition?: FieldCondition;
+};
+
+/**
+ * A field in a plugin Portable Text block's editing form. A field with a
+ * `condition` is shown only while that condition matches another top-level
+ * field's value; a hidden field keeps its value.
+ */
+export type PortableTextBlockField = Element & {
 	condition?: FieldCondition;
 };
 
