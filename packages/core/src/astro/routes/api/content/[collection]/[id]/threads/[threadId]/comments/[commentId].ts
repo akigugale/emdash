@@ -16,6 +16,8 @@ import {
 import { isParseError, parseBody } from "#api/parse.js";
 import { editorialCommentBody } from "#api/schemas.js";
 
+import { queueEditorialCommentNotifications } from "../../../../../../../../../editorial/notifications.js";
+
 export const prerender = false;
 
 export const PATCH: APIRoute = async ({ params, request, locals, url }) => {
@@ -38,6 +40,11 @@ export const PATCH: APIRoute = async ({ params, request, locals, url }) => {
 			params.threadId!,
 			params.commentId!,
 			body,
+			(mentioned) =>
+				queueEditorialCommentNotifications(
+					{ db: emdash.db, email: emdash.email, request, config: emdash.config },
+					mentioned,
+				),
 		),
 	);
 };
